@@ -9,7 +9,7 @@ libfinal.a : 1.o 2.o
 1.o : 1.c myProject.h
 	gcc --static -c -o 1.o 1.c
 
-b.o : b.c myProject.h
+2.o : 2.c myProject.h
 	gcc --static -c -o 2.o 2.c
 
 main.o : main.c myProject.h
