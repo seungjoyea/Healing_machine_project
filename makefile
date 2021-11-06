@@ -1,9 +1,9 @@
-all: final.elf
+all : main.elf
 
-final.elf: libfinal.a main.o
+main.elf : libfinal.a main.o
 	: gcc main.o -l final -L. -o final.elf
 
-libfinal.a: 1.o 2.o
+libfinal.a : 1.o 2.o
 	ar rc libfinal.a 1.o 2.o
 
 1.o : 1.c myProject.h
