@@ -1,7 +1,7 @@
-all : main.elf
+all : final.elf
 
-main.elf : libfinal.a main.o
-	: gcc main.o -l final -L. -o final.elf
+final.elf : libfinal.a main.o
+	gcc main.o -l final -L. -o final.elf
 
 libfinal.a : 1.o 2.o
 	ar rc libfinal.a 1.o 2.o
@@ -9,11 +9,11 @@ libfinal.a : 1.o 2.o
 1.o : 1.c myProject.h
 	gcc --static -c -o 1.o 1.c
 
-2.o : 2.c myProject.h
+b.o : b.c myProject.h
 	gcc --static -c -o 2.o 2.c
 
 main.o : main.c myProject.h
 	gcc --static -c -o main.o main.c
 
-clean :
+clean : 
 	rm -rf *.o *.a *.elf
