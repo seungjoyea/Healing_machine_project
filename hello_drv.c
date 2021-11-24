@@ -40,19 +40,29 @@ if( size >= 1 )
 
 static long hello_ioctl ( struct file *filp , unsigned int cmd, unsigned long arg )
 {
-    int cnt = 0; int k=0; 
-    if ( _IOC_TYPE (cmd) != 0x55) {  //magic number 맞는지 확인
-    printk(“Wrong Magic#!\n”);  
-    return -1;     
+    int cnt = 0;
+    int k =0;
+    if(_IOC_TYPE(cmd) != 0x55) {
+        printk("Wrong Magic num\n");
+        return -1;
     }
-    switch ( _IOC_NR (cmd) )
+switch(_IOC_NR (cmd))
 {
-    case 98: printk(“-> %d\n”,_IOC_SIZE ( cmd ));      //should be value에 scanf로 쓴값
-    copy_from_user(&cnt, arg, _IOC_SIZE( cmd ));       //write
-    for (k=0;k<cnt;k++) printk (“%d”, array [k]); printk(“\n”);break;
+    case 98 : printk("-> %d\n", _IOC_SIZE(cmd));
+    copy_from_user(&cnt, arg, _IOC_SIZE(cmd));
+    for(k=0; k<cnt; k++)
+    printk("%d", array[k]);
+    printk("\n");
+    break;
 
+    default : break;
+}
 
 }
+
+
+
+
 
 static int hello_release(struct inode *node, struct file *pfile)
 { printk("hello_release enter\n");
