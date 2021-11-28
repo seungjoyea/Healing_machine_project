@@ -48,4 +48,5 @@ unsigned long returnValue = ioctl (fd, inputCmd, &count);
 
 close(fd);
 return 0;
+
 }
