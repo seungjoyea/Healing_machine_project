@@ -1,0 +1,13 @@
+all: ledtest2.elf
+
+ledtest2.elf: libMyPeri.a ledtest2.o
+	arm-linux-gnueabi-gcc ledtest2.o -l MyPeri -L. -o ledtest2.elf
+
+ledtest2.o: ledtest2.c led.h
+	arm-linux-gnueabi-gcc -c ledtest2.c -o ledtest2.o
+
+libMyPeri.a: led.o
+	arm-linux-gnueabi-ar rc libMyPeri.a led.o
+
+led.o: led.h led.c
+	arm-linux-gnueabi-gcc --static -c led.c -o led.o
