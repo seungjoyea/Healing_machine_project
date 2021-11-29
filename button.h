@@ -7,6 +7,8 @@ long int messageNum;
 int keyInput;
 int pressed;
 } BUTTON_MSG_T;
-int buttonInit(void);
+int Initialize_Button(void);
+int probeButtonPath(char *newPath);
+int which_Button_did_you_push(void);
 int buttonExit(void);
 #endif
