@@ -20,6 +20,12 @@ if (onOff !=0) ledValue |= i;
 write (fd, &ledValue, 4);
 }
 
+int test(void)
+{
+	ledAllBlink_4sec();
+}
+
+
 int ledAllBlink_4sec(void)
 {
 for(num_4sec=0;num_4sec<2;num_4sec++){
