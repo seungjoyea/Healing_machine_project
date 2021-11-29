@@ -10,5 +10,18 @@ int pressed;
 int Initialize_Button(void);
 int probeButtonPath(char *newPath);
 int which_Button_did_you_push(void);
+void* buttonThFunc(void *arg);
 int buttonExit(void);
+
+#ifndef _MY_MESSAGE_H_
+#define _MY_MESSAGE_H_
+#define MY_MESSAGE_ID 8282
+typedef struct
+{
+long int messageType;
+char piggyBack[1000];
+} structMyMsg;
+#endif
+
+
 #endif
