@@ -80,35 +80,28 @@ int buzzerPlaySong(int time)
     //노래 나오게 음마다 딜레이하는법 생각 필요
     for(int t=0; t<time; t++){ 
         
-        for(int a=0; a<9999; a++)
-        { 
-            setFrequency(1);
+    
+        setFrequency(1);
         buzzerEnable(1);
-        }
+        sleep(1000);
         
-        for(int b=0; b<9999; b++)
-        {
+        
         setFrequency(2);
-        buzzerEnable(1);
-        }
+        //buzzerEnable(1);
+        sleep(1000);
         
-        for(int c=0; c<9999; c++)
-        {
-            setFrequency(3);
-        buzzerEnable(1);
-        }
+        setFrequency(3);
+        //buzzerEnable(1);
+        sleep(1000);
        
-        for(int d=0; d<9999; d++)
-        {
-            setFrequency(4);
-        buzzerEnable(1);
-        }
+        setFrequency(4);
+        //buzzerEnable(1);
+        sleep(1000);
         
-        for(int e=0; e<9999; e++)
-        {
-            setFrequency(5);
-        buzzerEnable(1);
-        }}
+        setFrequency(5);
+        //buzzerEnable(1);
+        sleep(1000);
+        }
 }
     
 
