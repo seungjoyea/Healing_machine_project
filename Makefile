@@ -1,14 +1,16 @@
-obj-m := hello_drv.o
-KDIR := /home/jo/linux_kernel/
-PWD := $(shell pwd)
-export ARCH=arm
-export CROSS_COMPILE=arm-linux-gnueabi-
-all:
-	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
-	$(CROSS_COMPILE)gcc /home/jo/hello_drv/hello_test.c -o hello_test.elf
-	scp *.ko ecube@172.30.1.8:/home/ecube/ecube_jo
-	scp *.elf ecube@172.30.1.8:/home/ecube/ecube_jo
+all:main_led_jo.elf
+	
+main_led_jo.elf: libMyPeri.a ledtest.o
+	arm-linux-gnueabi-gcc ledtest.o -l MyPeri -L. -o main_led_jo.elf
+	scp *.elf ecube@192.168.0.8:/home/ecube/ecube_jo
+libMyPeri.a: led.o
+	arm-linux-gnueabi-ar rc libMyPeri.a led.o
+	
+led.o: led.c led.h
+	arm-linux-gnueabi-gcc -c -o led.o led.c
+
+ledtest.o: ledtest.c led.h
+	arm-linux-gnueabi-gcc -c -o ledtest.o ledtest.c
 
 clean:
-	-rm -f *.o *.mod.c .*.cmd modules.order Module.symvers
-	rm -f *.o
+	rm -rf *.o *.a *.el-
