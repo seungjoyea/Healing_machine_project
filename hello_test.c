@@ -9,101 +9,47 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define HELLO_DRIVER_NAME "/dev/hello1"
-
-int main(int argc , char **argv)
-{ 
-
-    char data[2000];
-    int fd;
-    unsigned int inputCmd;
-    int value = 0;
-    unsigned long returnValue;
-
-    printf("enter test\n");
-
-    while (1) {
-    printf("1 to write\n");
-    printf("2 to read\n");
-    printf("3 to ioctl\n");
-    printf("please enter :");
-    scanf("%d", &value);
-
-    switch(value){
-    case 1 : 
-    printf("write option selected\n");
-    /* file open */
-    fd = open(HELLO_DRIVER_NAME,O_RDWR); // file open
-    if ( fd < 0 ) //open 잘 됬나 확인
-    { printf(" open fail\n");
-    perror("driver (/dev/hello1) open error.\n");
-    return 1;
-    }
-    printf("open success\n"); //open 잘 됨
-    /* write  */
-    printf("please enter the data to write into device\n : "); //Data를 써주세요
-    // data[0] = 1; data[1] = 2; data[2] = 3; data[3] = 4;
-    //scanf("%d", &data);  //이 scanf는 됨!
-     scanf(" %[^\n]", data);
-    write(fd, &data, 2000);
-    close(fd);
-    break;
-    
-    
-    case 2 : 
-    printf("read option selected\n");
-    /* file open */
-    fd = open(HELLO_DRIVER_NAME,O_RDWR);
-    if ( fd < 0 ) //open 잘 됬나 확인
-    { printf(" open fail\n");
-    perror("driver (/dev/hello1) open error.\n");
-    return 1;
-    }
-    printf("open success\n"); //open 잘 됨
-    /* read */
-    read(fd,data,2000);        
-    // printf("data is %c %c %c %c \n",data[0], data[1],data[2],data[3]);
-    printf("data is : ");
-    int k;
-    for(k=0; k<200; k++){
-    if(data[k] != NULL){
-    printf("%c", data[k]);
-    }
-    else break;
-    }
-    printf("\n");
-
-    close(fd);
-    break;
-
-    
-    case 3 :
-    printf("ioctl option selected\n");
-    /* file open */
-    fd = open(HELLO_DRIVER_NAME,O_RDWR);
-    if ( fd < 0 ) //open 잘 됬나 확인
-    { printf(" open fail\n");
-    perror("driver (/dev/hello1) open error.\n");
-    return 1;
-    }
-    printf("open success\n"); //open 잘 됨
-    
-    printf("'how much byte do you want to read?' please enter  :");
-    scanf("%d", &value);  //사용자가 원하는 byte를 입력
-   //value는 몇 byte 읽을지 정한 숫자 (ppt 65p, 66p 참고)
-    inputCmd = _IOW(0x55, 98, int); //cmd만들 때 그 size만큼 읽도록 만듬   현재는 8byte
-    returnValue = ioctl(fd, inputCmd, &value);
-    close(fd);
-    
-    default :     printf("select 1 or 2 or 3 \n");
-    }
 
 
+#define LED_DRIVER_NAME		"/dev/periled"
 
-    }
-
-  //  close(fd);
-    return 0;
+void doHelp(void)
+{
+	printf("Usage:\n");
+	printf("ledtest <hex byte>  :data bit0 operation 1=>on 0=>off\n");
+	printf("ex) ledtest 0x04 ;3th led on\n");
+	printf("    ledtest 0x05 ;4th and 1th led on\n");
+	printf("    ledtest 0xff ;all led on\n");
+	printf("    ledtest 0x00 ;all led off\n");
 }
 
-//write -> read 순으로 test 진행하기
+
+
+int main(int argc , char **argv)
+{
+
+	ledLibInit();
+	test();
+	
+	
+	AllLEDon_1s_twoLED_OFF_1s();
+	
+	ledAllBlink_4sec();
+	
+	while(1){
+    ledOnOff (0x01,0x01);
+    sleep(1);
+    ledOnOff(0x02,0x02);
+    sleep(1);
+    ledOnOff(0x01,0x00);
+    sleep(1);
+    ledOnOff(0x02,0x00);
+}
+
+
+
+
+	ledLibExit();
+	
+	return 0;
+}
