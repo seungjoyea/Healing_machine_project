@@ -29,6 +29,8 @@ int main(int argc , char **argv)
 {
 
 	ledLibInit();
+	test();
+	
 	
 	AllLEDon_1s_twoLED_OFF_1s();
 	
