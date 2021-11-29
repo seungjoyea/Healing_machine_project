@@ -4,10 +4,10 @@
 #include <linux/fs.h> // register_chrdev 함수
 #include <asm/uaccess.h> // copy_to_user함수
 
-#define HELLO_MAJOR_NUM 300
+#define HELLO_MAJOR_NUM 290
 #define HELLO_NAME "hello"
 
-static char array[2000]={'0','3','9', 0};  //Globar변수 array[2000] 추가
+static char array[2000] = {2,3,4,5,0};  //Globar변수 array[2000] 추가
 
 static int hello_open(struct inode *node, struct file *pfile)
 {
@@ -18,19 +18,24 @@ return 0;
 static ssize_t hello_read(struct file *pfile, char __user *pBuff, size_t size, loff_t *filepos)
 {
 printk("hello_read enter\n");
-
-    copy_to_user( pBuff, &array[0], size );
+if ( size >= 1)
+{
+    printk("read enter\n");
+    copy_to_user( pBuff, array, 2000 );
+    return 2000;
+}
     return 0;
-
 }
 
 static ssize_t hello_write(struct file *pfile, const char __user *pBuff, size_t size, loff_t *filepos) 
 {
 printk("hello_write enter\n");
-  
-    copy_from_user ( &array[0] , pBuff , size );
-    return 0;
-
+if( size >= 1 )
+{ 
+    printk("write enter\n");
+    copy_from_user ( array , pBuff , 2000 );
+    return 2000;
+}
 }
 
 static long hello_ioctl ( struct file *filp , unsigned int cmd, unsigned long arg )
@@ -41,15 +46,23 @@ static long hello_ioctl ( struct file *filp , unsigned int cmd, unsigned long ar
         printk("Wrong Magic num\n");
         return -1;
     }
-    
+switch(_IOC_NR (cmd))
+{
+    case 98 : printk("-> %d\n", _IOC_SIZE(cmd));
     copy_from_user(&cnt, arg, _IOC_SIZE(cmd));
-    printk("N byte -> %d\n", cnt);
-    printk("Array의 값을 N byte만큼 아스키코드(%%d)로 출력:");
     for(k=0; k<cnt; k++)
-    printk("%d ", array[k]);
+    printk("%d", array[k]);
     printk("\n");
+    break;
+
+    default : break;
+}
 
 }
+
+
+
+
 
 static int hello_release(struct inode *node, struct file *pfile)
 { printk("hello_release enter\n");
