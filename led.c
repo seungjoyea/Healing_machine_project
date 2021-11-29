@@ -32,6 +32,25 @@ sleep(1);
 }
 }
 
+int AllLEDon_1s_twoLED_OFF_1s(void)
+{
+ledValue = 0xFF;
+write (fd, &ledValue, 4);
+sleep(1);
+ledValue = 0b01111110;
+write (fd, &ledValue, 4);
+sleep(1);
+ledValue = 0b00111100;
+write (fd, &ledValue, 4);
+sleep(1);
+ledValue = 0b00011000;
+write (fd, &ledValue, 4);
+sleep(1);
+ledValue = 0x00;
+write (fd, &ledValue, 4);
+sleep(1);
+}
+
 int ledLibExit(void)
 {
 ledValue = 0;
