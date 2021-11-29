@@ -21,7 +21,15 @@ struct input_event stEvent; //구조체
 static int err;
 static int msgID;
 static int i; //에러확인용 변수
+static int count = 0;
+structMyMsg messageTxData;
 pthread_t tid; //pthread 주소 return
+
+typedef struct data {    //데이터 저장용 변수 선언
+    char bank[1000];
+    } data;
+
+data databuffer; //데이터 저장
 
 int Initialize_Button(void)
 {
@@ -35,7 +43,7 @@ return 0;
 printf ("inputDevPath: %s\r\n", inputDevPath);  //위에서 입력받은 event 번호 출력
 fp = open(inputDevPath, O_RDONLY);                //그 파일을 열고
 
-msgID = msgget (MESSAGE_ID, IPC_CREAT|0666);
+msgID = msgget ((key_t)9999, IPC_CREAT|0666);
     if(msgID == -1){                               //우체통 생성 확인
         printf("Cannot get msgQueueID\n"); 
         return -1;
@@ -51,7 +59,40 @@ return fp;
 
 void* buttonThFunc(void *arg) //Thread가 실행할 함수
 {  
- which_Button_did_you_push();
+
+while(1)
+{
+readSize = read(fp, &stEvent , sizeof(stEvent));  //button Device driver는 input_event 구조체로 읽는데 이름은 stEvent
+if (readSize != sizeof(stEvent))   //Read하는 크기가 정해져있다!
+{
+continue;                           //잘 읽었다면
+}
+if ( stEvent.type == EV_KEY)
+{
+printf("EV_KEY(");
+switch(stEvent.code)
+{
+case KEY_VOLUMEUP: printf("Volume up key):"); 
+                      snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d Volume up key :", count);
+                      break;
+case KEY_HOME: printf("Home key):"); break;
+case KEY_SEARCH: printf("Search key):"); break;
+case KEY_BACK: printf("Back key):"); break;
+case KEY_MENU: printf("Menu key):"); break;
+case KEY_VOLUMEDOWN: printf("Volume down key):"); break;
+}
+count++;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "Hello! this is %d message", count);
+messageTxData.messageType = 1; //1 is good enough
+printf ("\tSending %d message\r\n",count);
+msgsnd(msgID, &messageTxData, sizeof(messageTxData.bulk_message), 0);
+
+if ( stEvent.value ) printf("pressed\n");             //value == 1이면 key가 안눌렸다가 눌렸을 때, value==0이면 눌렀다가 땠을 때
+else printf("released\n");
+} //End of if
+else // EV_SYN
+; // do notthing
+} // End of While
 
 }
 
