@@ -11,7 +11,7 @@
 #include "led.h"
 
 static unsigned int ledValue = 0;
-static int fd = 0;
+static int fd2 = 0;
 
 int ledOnOff (int ledNum, int onOff)
 {
@@ -19,21 +19,26 @@ int ledOnOff (int ledNum, int onOff)
     i = i<<ledNum;
     ledValue = ledValue& (~i);
     if (onOff !=0) ledValue |= i;
-    write (fd, &ledValue, 4);
+    write (fd2, &ledValue, 4);
 }
 
 
 int ledLibInit(void)
 {
-    fd = open("/dev/periled", O_WRONLY);
+    fd2 = open("/dev/periled", O_WRONLY);
+    if ( fd < 0 )
+    {
+    perror("driver (//dev//cnled) open error.\n");
+    return 1;
+    }
     ledValue = 0;
 }
 
 int ledLibExit(void)
 {
     ledValue = 0;
-    ledOnOff (0, 0);
-    close(fd);
+    //ledOnOff (0, 0);
+    close(fd2);
 }
 
 /*
