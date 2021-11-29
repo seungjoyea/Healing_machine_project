@@ -18,11 +18,13 @@ static char inputDevPath[200]={0,};
 static int fp;
 int readSize,inputIndex;
 struct input_event stEvent; //구조체
-
+static int err;
+static int msgID;
+static int i; //에러확인용 변수
+pthread_t tid; //pthread 주소 return
 
 int Initialize_Button(void)
 {
-	probeButtonPath(inputDevPath);
 	// first read input device
 if ( probeButtonPath(inputDevPath) == 0)  //버튼 실행
 {
@@ -32,8 +34,31 @@ return 0;
 }
 printf ("inputDevPath: %s\r\n", inputDevPath);  //위에서 입력받은 event 번호 출력
 fp = open(inputDevPath, O_RDONLY);                //그 파일을 열고
+
+msgID = msgget (MESSAGE_ID, IPC_CREAT|0666);
+    if(msgID == -1){                               //우체통 생성 확인
+        printf("Cannot get msgQueueID\n"); 
+        return -1;
+    }
+    
+err = pthread_create(&tid, NULL, &buttonThFunc, NULL);  //thread생성
+if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
+
+pthread_join(tid,NULL); //Thread 종료시까지 wait
+
 return fp;
 }
+
+void* buttonThFunc(void *arg) //Thread가 실행할 함수
+{  
+ which_Button_did_you_push();
+
+}
+
+
+
+
+
 
 // first read input device
 int probeButtonPath(char *newPath)
