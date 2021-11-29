@@ -30,6 +30,8 @@ int main(int argc , char **argv)
 
 	ledLibInit();
 	
+	AllLEDon_1s_twoLED_OFF_1s();
+	
 	ledAllBlink_4sec();
 	
 	while(1){
