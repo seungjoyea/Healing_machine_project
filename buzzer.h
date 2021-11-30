@@ -1,7 +1,10 @@
 #ifndef _BUZZER_H_
 #define _BUZZER_H_
 int buzzerInit(void);
-int buzzerPlaySong(int time);
-int buzzerStopSong(void);
+void buzzerPlaySong(void);
+void buzzerStopSong(void);
 int buzzerExit(void);
+void buzzerON(void);
+void buzzerOFF(void);
+void Frequency(void);
 #endif
