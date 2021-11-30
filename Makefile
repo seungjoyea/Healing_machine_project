@@ -2,7 +2,7 @@ all:main_led_jo.elf
 	
 main_led_jo.elf: libMyPeri.a ledtest.o
 	arm-linux-gnueabi-gcc ledtest.o -l MyPeri -L. -o main_led_jo.elf
-	scp *.elf ecube@192.168.0.8:/home/ecube/ecube_jo
+	
 libMyPeri.a: led.o
 	arm-linux-gnueabi-ar rc libMyPeri.a led.o
 	
