@@ -41,11 +41,11 @@ int main(int argc , char **argv)
 	int mode ;
 	int number,counter;
 	
-
-	counter_10();
-    sleep(1);
 	fndDisp(123456, 0);
 	sleep(1);
+	counter_10();
+    sleep(1);
+
 	
 	timeDis();
 	sleep(1);
