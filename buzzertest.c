@@ -11,102 +11,17 @@
 #define BUZZER_FREQUENCY_NAME "frequency"
 #include "buzzer.h"
 
-
-char gBuzzerBaseSysDir[128]; ///sys/bus/platform/devices/peribuzzer.XX 가 결정됨
-
-
-const int musicScale[MAX_SCALE_STEP] =
-{
-262, /*do*/ 294,330,349,392,440,494, /* si */ 523
-}; //musicScale[0] 도, [1] 레 ...
-
-
-
-int findBuzzerSysPath(){
-DIR* dir_info = opendir ("/sys/bus/platform/devices/");
-int ifNotFound = 1;
-if (dir_info != NULL){
-while (1){
-struct dirent *dir_entry;
-dir_entry = readdir (dir_info);
-if (dir_entry == NULL) break;
-if (strncasecmp(BUZZER_FILENAME, dir_entry->d_name, strlen(BUZZER_FILENAME)) == 0){
-ifNotFound = 0;
-sprintf(gBuzzerBaseSysDir,"%s%s/", "/sys/bus/platform/devices/",dir_entry->d_name);
-}
-}
-}
-printf("find %s\n",gBuzzerBaseSysDir);
-return ifNotFound;
-}
-//버저 경로 찾기: /sys/bus/platform/devices/peribuzzer.XX 의 XX를 결정하는 것
-
-void doHelp(void)
-{
-printf("Usage:\n");
-printf("buzzertest <buzzerNo> \n");
-printf("buzzerNo: \n");
-printf("do(1),re(2),mi(3),fa(4),sol(5),ra(6),si(7),do(8) \n");
-printf("off(0)\n");
-}
-
-void buzzerEnable(int bEnable)
-{
-char path[200];
-sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_ENABLE_NAME);
-int fd=open(path,O_WRONLY);
-if ( bEnable) write(fd, &"1", 1);
-else write(fd, &"0", 1);
-close(fd);
-}
-
-void setFrequency(int frequency)
-{
-char path[200];
-sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
-int fd=open(path,O_WRONLY);
-dprintf(fd, "%d", frequency);
-close(fd);
-}
-
-int buzzerInit(void)
-{
-    findBuzzerSysPath();
-}
-
-int buzzerPlaySong(int time)
-{   
-    //time 노래 반복횟수
-    //노래 나오게 음마다 딜레이하는법 생각 필요
-    for(int t=0; t<time; t++){ 
-        
+int main(){
+    //int tm = 2; //노래반복횟수
     
-        setFrequency(1);
-        buzzerEnable(1);
-        sleep(1000);
-        
-        
-        setFrequency(2);
-        //buzzerEnable(1);
-        sleep(1000);
-        
-        setFrequency(3);
-        //buzzerEnable(1);
-        sleep(1000);
-       
-        setFrequency(4);
-        //buzzerEnable(1);
-        sleep(1000);
-        
-        setFrequency(5);
-        //buzzerEnable(1);
-        sleep(1000);
-        }
-}
-    
+    buzzerInit();
+    Frequency();
+    buzzerON();
 
+    sleep(5);
+    buzzerOFF();
+    //buzzerPlaySong();
+    //buzzerStopSong();
 
-int buzzerStopSong(void)
-{
-    buzzerEnable(0);
+    return 0;
 }
