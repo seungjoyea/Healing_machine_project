@@ -73,28 +73,60 @@ printf("EV_KEY(");
 switch(stEvent.code)
 {
 case KEY_VOLUMEUP: printf("Volume up key):"); 
-                      snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d Volume up key :", count);
-                      break;
-case KEY_HOME: printf("Home key):"); break;
-case KEY_SEARCH: printf("Search key):"); break;
-case KEY_BACK: printf("Back key):"); break;
-case KEY_MENU: printf("Menu key):"); break;
-case KEY_VOLUMEDOWN: printf("Volume down key):"); break;
+int button1 = 5;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button1);
+printf ("button %d\r\n",button1);
+break;
+case KEY_HOME: printf("Home key):"); 
+int button2 = 1;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button2);
+printf ("button %d\r\n",button2);
+break;
+case KEY_SEARCH: printf("Search key):"); 
+int button3 = 3;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button3);
+printf ("button %d\r\n",button3);
+break;
+case KEY_BACK: printf("Back key):"); 
+int button4 = 2;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button4);
+printf ("button %d\r\n",button4);
+break;
+case KEY_MENU: printf("Menu key):"); 
+int button5 = 4;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button5);
+printf ("button %d\r\n",button5);
+break;
+case KEY_VOLUMEDOWN: printf("Volume down key):"); 
+int button6 = 6;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button6);
+printf ("button %d\r\n",button6);
+break;
 }
-count++;
-snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "Hello! this is %d message", count);
 messageTxData.messageType = 1; //1 is good enough
-printf ("\tSending %d message\r\n",count);
 msgsnd(msgID, &messageTxData, sizeof(messageTxData.bulk_message), 0);
 
-if ( stEvent.value ) printf("pressed\n");             //value == 1이면 key가 안눌렸다가 눌렸을 때, value==0이면 눌렀다가 땠을 때
-else printf("released\n");
-} //End of if
-else // EV_SYN
-; // do notthing
-} // End of While
 
+if ( stEvent.value ){
+int button_pressed = 7;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button_pressed);
+printf("pressed\n");             //value == 1이면 key가 안눌렸다가 눌렸을 때, value==0이면 눌렀다가 땠을 때
+messageTxData.messageType = 1; //1 is good enough
+msgsnd(msgID, &messageTxData, sizeof(messageTxData.bulk_message), 0);
 }
+else 
+{
+int button_released =8;
+snprintf(messageTxData.bulk_message, sizeof(messageTxData.bulk_message)-1, "%d", button_released);
+printf("released\n");
+messageTxData.messageType = 1; //1 is good enough
+msgsnd(msgID, &messageTxData, sizeof(messageTxData.bulk_message), 0);
+}
+
+}// if ( stEvent.type == EV_KEY) 끝
+
+} //while끝
+}//함수끝
 
 
 
