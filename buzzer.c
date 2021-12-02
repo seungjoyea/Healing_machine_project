@@ -9,6 +9,7 @@
 #define BUZZER_FILENAME "peribuzzer"
 #define BUZZER_ENABLE_NAME "enable"
 #define BUZZER_FREQUENCY_NAME "frequency"
+#include "buzzer.h"
 
 
 char gBuzzerBaseSysDir[128]; ///sys/bus/platform/devices/peribuzzer.XX 가 결정됨
@@ -91,7 +92,7 @@ int buzzerInit(void)
 void buzzerON(void)
 {
 char path[200];
-sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_ENABLE_NAME);
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_ENABLE_NAME); //gBuzzerBaseSysDir에 xx까지의 경로 있고,enable파일접근
 int fd=open(path,O_WRONLY);
 write(fd, &"1", 1);
 close(fd);
@@ -103,7 +104,7 @@ void Frequency(void)
 char path[200];
 sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
 int fd=open(path,O_WRONLY);
-dprintf(fd, "%d", 2);
+dprintf(fd, "%d", musicScale[2]);
 close(fd);
 }
 
@@ -116,10 +117,9 @@ write(fd, &"0", 1);
 close(fd);
 }
 
-
+////////////////////////////////////////////
 void buzzerPlaySong(void)
-{   
-        
+{           
 char path[200];
 sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
 int fd=open(path,O_WRONLY);
