@@ -1,10 +1,17 @@
 #ifndef _BUZZER_H_
 #define _BUZZER_H_
 int buzzerInit(void);
-void buzzerPlaySong(void);
-void buzzerStopSong(void);
-int buzzerExit(void);
 void buzzerON(void);
 void buzzerOFF(void);
-void Frequency(void);
+void F_DO(void);
+void F_RE(void);
+void F_MI(void);
+void F_PA(void);
+void F_SOL(void);
+void F_RA(void);
+void F_SI(void);
+//매크로//
+void buzzerTest(void);
+void buzzerSiren(void);
+void buzzerPlaySong(void);
 #endif
