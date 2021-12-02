@@ -12,16 +12,11 @@
 #include "buzzer.h"
 
 int main(){
-    //int tm = 2; //노래반복횟수
     
     buzzerInit();
-    Frequency();
-    buzzerON();
-
-    sleep(5);
-    buzzerOFF();
-    //buzzerPlaySong();
-    //buzzerStopSong();
-
+    buzzerTest();
+    sleep(1);
+    buzzerPlaySong();
+    
     return 0;
 }
