@@ -7,8 +7,14 @@ main.elf: libMyPeri.a main.o
 main.o : main.c
 	arm-linux-gnueabi-gcc -c main.c -o main.o
 
-libMyPeri.a: led.o button.o fnd.o textlcd.o colorled.o
-	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o fnd.o textlcd.o colorled.o
+libMyPeri.a: led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o
+	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o
+
+acclMagGyro.o : acclMagGyro.c acclMagGyro.h
+	arm-linux-gnueabi-gcc -c acclMagGyro.c -o acclMagGyro.o
+
+temperature.o : temperature.c temperature.h
+	arm-linux-gnueabi-gcc -c temperature.c -o temperature.o
 
 colorled.o : colorled.c colorled.h
 	arm-linux-gnueabi-gcc -c colorled.c -o colorled.o
