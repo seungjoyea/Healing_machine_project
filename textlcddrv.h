@@ -7,6 +7,7 @@
 #define MODE_DATA 1
 
 int First_line_write(void);
+int Second_line_write(void);
 
 typedef struct TextLCD_tag
 {
@@ -15,6 +16,9 @@ unsigned char cmdData;
 unsigned char reserved[2];
 char TextData[LINE_NUM][LINE_BUFF_NUM];
 }stTextLCD,*pStTextLCD;
+
+int First_line_write(void);
+
 
 #define CMD_DISPLAY_MODE 0x10
          #define BIT_DISPLAY_MODE_CURSOR_DISP 0x01
