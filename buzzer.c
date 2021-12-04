@@ -127,28 +127,36 @@ int fd=open(path,O_WRONLY);
 dprintf(fd, "%d", 494);
 close(fd);
 }
-
+void F_DO_High(void)
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 523);
+close(fd);
+}
 
 
 ///////////////////사용자 제작 함수/////////////////////////
-
 void buzzerTest(void)
 {
     F_DO();
     buzzerON();
-    sleep(0.5);
+    usleep(800000);
     F_RE();
-    sleep(0.5);
+    usleep(800000);
     F_MI();
-    sleep(0.5);
+    usleep(800000);
     F_PA();
-    sleep(0.5);
+    usleep(800000);
     F_SOL();
-    sleep(0.5);
+    usleep(800000);
     F_RA();
-    sleep(0.5);
+    usleep(800000);
     F_SI();
-    sleep(0.5);
+    usleep(800000);
+    F_DO_High();
+    usleep(800000);
     buzzerOFF();
 }
 
@@ -171,121 +179,122 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
 {           
     F_DO();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);    
+    usleep(50000);    
 
     F_MI();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_SOL();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_DO();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_MI();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_SOL();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_SOL();
     buzzerON();
-    sleep(0.5);
+    usleep(1100000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(100000);
 
     F_PA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
     
     F_PA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_PA();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_MI();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
     
     F_MI();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
     
     F_MI();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RE();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RE();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
 
     F_RE();
     buzzerON();
-    sleep(0.5);
+    usleep(500000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(50000);
     
     F_DO();
     buzzerON();
-    sleep(0.5);
+    usleep(1100000);
     buzzerOFF();
-    sleep(0.1);
+    usleep(100000);
+
 }
