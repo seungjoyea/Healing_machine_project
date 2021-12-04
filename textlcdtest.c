@@ -14,19 +14,22 @@
 
 #define TEXTLCD_DRIVER_NAME		"/dev/peritextlcd"
 
-void doHelp(void)
-{
-	printf("usage: textlcdtest <linenum> <'string'>\n");
-	printf("       linenum => 1 ~ 2\n");	
-	printf("  ex) textlcdtest 2 'test hello'\n");
-	
-}
 
 
-int main(int argc , char **argv)
-{
+int main(void)
+{   
+    int one = 1;
+    int two = 2;
+    char abc[10] = "Hello";
+    char xyz[10] = "embeded";
 
-	First_line_write();
-	Second_line_write();
-	
+    lcdtextInit();
+
+    lcdtextWrite(one, abc);
+    lcdtextWrite(two, xyz);
+    sleep(5);
+    
+    lcdtextOff();
+
+    return 0;
 }
