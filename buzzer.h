@@ -10,6 +10,7 @@ void F_PA(void);
 void F_SOL(void);
 void F_RA(void);
 void F_SI(void);
+void F_DO_High(void);
 //매크로//
 void buzzerTest(void);
 void buzzerSiren(void);
