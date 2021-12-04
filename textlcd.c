@@ -10,56 +10,63 @@
 #include <unistd.h>
 #include "textlcddrv.h"
 
+
+
 #define TEXTLCD_DRIVER_NAME		"/dev/peritextlcd"
 
-
-int First_line_write(void)
+void doHelp(void)
 {
-	stTextLCD  stlcd; 
-	int fd;
-	int len; 
-	char *data =("What do you want") ;
-	memset(&stlcd,0,sizeof(stTextLCD));
-
-	stlcd.cmdData = CMD_DATA_WRITE_LINE_1;
+	printf("usage: textlcdtest <linenum> <'string'>\n");
+	printf("       linenum => 1 ~ 2\n");	
+	printf("  ex) textlcdtest 2 'test hello'\n");
 	
-	len = strlen(data);
-	if ( len > COLUMN_NUM)
-	{
-		memcpy(stlcd.TextData[stlcd.cmdData - 1],data,COLUMN_NUM);
-	}
-	else
-	{
-		memcpy(stlcd.TextData[stlcd.cmdData - 1],data,len);
-	}
-		
-	stlcd.cmd = CMD_WRITE_STRING;
-	
-	fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
-	if ( fd < 0 )
-	{
-		perror("driver (//dev//peritextlcd) open error.\n");
-		return 1;
-	}
-	write(fd,&stlcd,sizeof(stTextLCD));
-	
-    close(fd);
-		
-	return 0;
 }
 
-int Second_line_write(void)
-{
 
-	stTextLCD  stlcd; 
-	int fd;
-	int len; 
-	char *data =("Second line s") ;
+//-------------------디스플레이모드 Enable----------------//
+int lcdtextInit(void)
+{   
+    stTextLCD  stlcd; 
+	memset(&stlcd,0,sizeof(stTextLCD));
+    int fd;
+	stlcd.cmd = CMD_DISPLAY_MODE;               //cmd : display mode
+    stlcd.cmdData= 0x04;						//cmdData : Enable
+    
+    fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
+	if ( fd < 0 )
+	{
+		perror("driver (//dev//peritextlcd) open error.\n");
+		return 1;
+	}
+	write(fd,&stlcd,sizeof(stTextLCD));
+
+    close(fd);
+
+	return 0;
+
+}
+
+
+//-------------------Write String 하는 함수----------------//
+int lcdtextWrite(unsigned int linenum, char *data)  //입력은 linenum : 1 또는 2(몇째줄에 쓸지) , char *은 쓸 스트링 주소값 넣기
+{   
+    stTextLCD  stlcd; 
 	memset(&stlcd,0,sizeof(stTextLCD));
 
-	stlcd.cmdData = CMD_DATA_WRITE_LINE_2;
-	
-	len = strlen(data);
+    int fd;
+	int len; 
+
+    if(linenum == 1)
+        stlcd.cmdData = CMD_DATA_WRITE_LINE_1;
+    else if (linenum == 2)
+        stlcd.cmdData = CMD_DATA_WRITE_LINE_2;
+    else{
+        printf("linenum: %d wrong. range (1~2)\n", linenum);
+        return 1;
+    }
+
+    len = strlen(data);
+
 	if ( len > COLUMN_NUM)
 	{
 		memcpy(stlcd.TextData[stlcd.cmdData - 1],data,COLUMN_NUM);
@@ -68,18 +75,44 @@ int Second_line_write(void)
 	{
 		memcpy(stlcd.TextData[stlcd.cmdData - 1],data,len);
 	}
-		
+
 	stlcd.cmd = CMD_WRITE_STRING;
-	
-	fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
+    
+     fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
 	if ( fd < 0 )
 	{
 		perror("driver (//dev//peritextlcd) open error.\n");
 		return 1;
 	}
 	write(fd,&stlcd,sizeof(stTextLCD));
-	
+
     close(fd);
-		
+
 	return 0;
+  
+}
+
+
+
+//-------------------디스플레이모드 Disalbe----------------//
+int lcdtextOff(void)
+{   
+    stTextLCD  stlcd; 
+	memset(&stlcd,0,sizeof(stTextLCD));
+    int fd;
+	stlcd.cmd = CMD_DISPLAY_MODE;					//cmd : display mode
+    stlcd.cmdData= 0x00;							//cmdData : disnable
+    
+    fd = open(TEXTLCD_DRIVER_NAME,O_RDWR);
+	if ( fd < 0 )
+	{
+		perror("driver (//dev//peritextlcd) open error.\n");
+		return 1;
+	}
+	write(fd,&stlcd,sizeof(stTextLCD));
+
+    close(fd);
+
+	return 0;
+
 }
