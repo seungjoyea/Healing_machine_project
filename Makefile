@@ -7,8 +7,8 @@ main.elf: libMyPeri.a main.o
 main.o : main.c
 	arm-linux-gnueabi-gcc -c main.c -o main.o
 
-libMyPeri.a: led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o
-	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o
+libMyPeri.a: led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o buzzer.o
+	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o buzzer.o
 
 acclMagGyro.o : acclMagGyro.c acclMagGyro.h
 	arm-linux-gnueabi-gcc -c acclMagGyro.c -o acclMagGyro.o
@@ -30,6 +30,9 @@ fnd.o : fnd.c fnddrv.h
 
 textlcd.o : textlcd.c textlcddrv.h
 	arm-linux-gnueabi-gcc -c textlcd.c -o textlcd.o
+
+buzzer.o: buzzer.h buzzer.c
+	arm-linux-gnueabi-gcc --static -c buzzer.c -o buzzer.o
 
 clean:
 	rm -rf *.o *.a *.el-
