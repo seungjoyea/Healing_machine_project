@@ -14,32 +14,7 @@
 #define PWM_COLOR_R 0
 #define PWM_COLOR_G 1
 #define PWM_COLOR_B 2
-#define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz
-int ColorLED_White(void)
-{
-pwmSetPercent_RED(100);
-pwmSetPercent_BLUE(100);
-pwmSetPercent_GREEN(100);
-}
-
-int ColorLED_Red(void)
-{
-pwmSetPercent_RED(100);
-pwmSetPercent_BLUE(0);
-pwmSetPercent_GREEN(0);
-}
-int ColorLED_Green(void)
-{
-pwmSetPercent_RED(0);
-pwmSetPercent_BLUE(0);
-pwmSetPercent_GREEN(100);
-}
-int ColorLED_Blue(void)
-{
-pwmSetPercent_RED(0);
-pwmSetPercent_BLUE(100);
-pwmSetPercent_GREEN(0);
-}
+#define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz 
 
 int pwmActiveAll(void)
 {
@@ -114,7 +89,7 @@ close(fd);
 return 1;
 }
 
-int pwmSetPercent_RED(int percent)
+int pwmSetPercent(int percent, int ledColor)
 {
 if ((percent <0) || (percent > 100))
 {
@@ -123,36 +98,9 @@ return 0;
 }
 int duty = (100- percent) * PWM_PERIOD_NS / 100;
 //LED Sinking.
-pwmSetDuty(duty, 0);
+pwmSetDuty(duty, ledColor);
 return 0;
 }
-
-int pwmSetPercent_GREEN(int percent)
-{
-if ((percent <0) || (percent > 100))
-{
-printf ("Wrong percent: %d\r\n",percent);
-return 0;
-}
-int duty = (100- percent) * PWM_PERIOD_NS / 100;
-//LED Sinking.
-pwmSetDuty(duty, 1);
-return 0;
-}
-
-int pwmSetPercent_BLUE(int percent)
-{
-if ((percent <0) || (percent > 100))
-{
-printf ("Wrong percent: %d\r\n",percent);
-return 0;
-}
-int duty = (100- percent) * PWM_PERIOD_NS / 100;
-//LED Sinking.
-pwmSetDuty(duty, 2);
-return 0;
-}
-
 
 int pwmStartAll(void)
 {
@@ -179,3 +127,117 @@ pwmSetPeriod(PWM_PERIOD_NS, 0); pwmSetPeriod(PWM_PERIOD_NS, 1); pwmSetPeriod(PWM
 pwmStartAll();
 return 0;
 }
+
+//---------------colorled 단일 색상 컨트롤 관련 함수-------------------//
+int pwmSetPercent_RED(int percent)
+{
+if ((percent <0) || (percent > 100))
+{
+printf ("Wrong percent: %d\r\n",percent);
+return 0;
+}
+int duty = (100- percent) * PWM_PERIOD_NS / 100;
+//LED Sinking.
+pwmSetDuty(duty, 2);
+return 0;
+}
+
+int pwmSetPercent_GREEN(int percent)
+{
+if ((percent <0) || (percent > 100))
+{
+printf ("Wrong percent: %d\r\n",percent);
+return 0;
+}
+int duty = (100- percent) * PWM_PERIOD_NS / 100;
+//LED Sinking.
+pwmSetDuty(duty, 1);
+return 0;
+}
+
+int pwmSetPercent_BLUE(int percent)
+{
+if ((percent <0) || (percent > 100))
+{
+printf ("Wrong percent: %d\r\n",percent);
+return 0;
+}
+int duty = (100- percent) * PWM_PERIOD_NS / 100;
+//LED Sinking.
+pwmSetDuty(duty, 0);
+return 0;
+}
+
+int ColorLED_White(void)
+{
+pwmSetPercent_RED(100);
+pwmSetPercent_BLUE(100);
+pwmSetPercent_GREEN(100);
+}
+
+int ColorLED_Red(void)
+{
+pwmSetPercent_RED(100);
+pwmSetPercent_BLUE(0);
+pwmSetPercent_GREEN(0);
+}
+int ColorLED_Green(void)
+{
+pwmSetPercent_RED(0);
+pwmSetPercent_BLUE(0);
+pwmSetPercent_GREEN(100);
+}
+int ColorLED_Blue(void)
+{
+pwmSetPercent_RED(0);
+pwmSetPercent_BLUE(100);
+pwmSetPercent_GREEN(0);
+}
+
+
+//---------------Colorled 끄고 종료 --------------------------------//
+int pwmLedOff(void)
+{
+    pwmActiveAll();
+    pwmSetDuty(PWM_PERIOD_NS, 0); //R<-0
+    pwmSetDuty(PWM_PERIOD_NS, 1); //G<-0
+    pwmSetDuty(PWM_PERIOD_NS, 2); //B<-0
+    pwmSetPeriod(PWM_PERIOD_NS, 0); pwmSetPeriod(PWM_PERIOD_NS, 1); pwmSetPeriod(PWM_PERIOD_NS, 2);
+    pwmStartAll();
+    pwmInactiveAll();
+
+    return 0;
+}
+
+//-------입력받은 온도에 따라 색깔이 달라지는 모드----------//
+int pwmLed_thermalcheckmode(double a)
+{
+    pwmLedInit();
+    if(a>80)
+    {
+    pwmSetPercent(0,0);
+    pwmSetPercent(0,1);
+    pwmSetPercent(100,2);
+    }
+    else if(a>60)
+    {
+    pwmSetPercent(100,0);
+    pwmSetPercent(100,1);
+    pwmSetPercent(100,2);
+    }
+    else if(a>40)
+    {
+    pwmSetPercent(0,0);
+    pwmSetPercent(100,1);
+    pwmSetPercent(0,2);
+    }
+    else   
+    {
+    pwmSetPercent(100,0);
+    pwmSetPercent(0,1);
+    pwmSetPercent(0,2);
+    }
+    return 0;
+}
+
+
