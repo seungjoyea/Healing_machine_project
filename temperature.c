@@ -9,14 +9,19 @@
 #include <sys/ioctl.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
+
+#define SPIFILE "/dev/spidev1.0"
+
+#include "temperature.h"
+
 char gbuf[10];
 
-int spi_init(char filename[40])
+int spi_init(void)
 {
 int file;
 __u8 mode, lsb, bits;
 __u32 speed=20000;
-if ((file = open(filename,O_RDWR)) < 0) {
+if ((file = open(SPIFILE,O_RDWR)) < 0) {
 printf("Failed to open the bus."); printf ("ErrorType:%d\r\n",errno); exit(1); }
 //possible modes: mode |= SPI_LOOP; mode |= SPI_CPHA; mode |= SPI_CPOL; mode |= SPI_LSB_FIRST; mode |= SPI_CS_HIGH;
 //mode |= SPI_3WIRE; mode |= SPI_NO_CS; mode |= SPI_READY;
@@ -26,7 +31,7 @@ if (ioctl(file, SPI_IOC_RD_LSB_FIRST, &lsb) < 0)
 { perror("SPI rd_lsb_fist"); return 0; }
 if (ioctl(file, SPI_IOC_RD_BITS_PER_WORD, &bits) < 0)
 { perror("SPI bits_per_word"); return 0; }
-printf("%s: spi mode %d, %d bits %sper word, %d Hz max\n",filename, mode, bits, lsb ? "(lsb first) " : "", speed);
+printf("%s: spi mode %d, %d bits %sper word, %d Hz max\n",SPIFILE, mode, bits, lsb ? "(lsb first) " : "", speed);
 return file;
 }
 
@@ -43,10 +48,10 @@ return NULL;
 return gbuf;
 }
 
-void read_temperature(void)
-{
-	char *buffer; int file;
-file=spi_init("/dev/spidev1.0"); //dev
+//-------------이 함수의 return값을 온도로 해서 이 return값을 바로 다른 함수에 활용---------//
+double read_temperature(void){
+char *buffer; int file;
+file=spi_init(); //dev
 buffer=(char *)spi_read_lm74(file);
 close(file);
 int value = 0; //13비트 Big Endian Signed Int를 16비트 Little Endian Signed Int로 바꾼다
@@ -62,7 +67,5 @@ value |= (1<<i); //1로 비트를 채움
 double temp = (double)value*0.0625;
 //1비트가 0.0625도
 printf("Current Temp: %lf \n", temp);
-return 0;
+return temp;
 }
-
-
