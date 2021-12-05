@@ -14,31 +14,43 @@
 #define PWM_COLOR_R 0
 #define PWM_COLOR_G 1
 #define PWM_COLOR_B 2
-#define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz
+#define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz 
 
-//얘 실행할 땐 sudo su로 해서 root권한으로 elf파일 실행시켜야됨!
+#include "colorled.h"
 
-int main(int argc, char *argv[]) {
-	/*
-if (argc != 4)
-{ printf ("colorledtest.elf 0-100 0-100 0-100\r\n");
-printf ("ex) colorledtest.elf 100 100 100 ==> full white color\r\n");
-return 0; }
-*/
-pwmLedInit();
+int main(void) 
+{   
+    //---입력한 온도 값이라고 생각---//
+    double a = 100;
+    double b = 70;
+    double c = 50;
+    double d = 30;
+    
+    //---led 초기셋팅---//
+    pwmLedInit();
 
-while(1){
- ColorLED_White();
- sleep(1);
- ColorLED_Red();
- sleep(1);
- ColorLED_Green();
- sleep(1);
- ColorLED_Blue();
- sleep(1);
-}
+    //---개별 조명 컨트롤---//
+    ColorLED_White();
+    sleep(1);
+    ColorLED_Red();
+    sleep(1);
+    ColorLED_Green();
+    sleep(1);
+    ColorLED_Blue();
+    sleep(1);
+    
+    //---온도값에 따른 색상 변화 함수---//
+    pwmLed_thermalcheckmode(a);
+    sleep(2);
+    pwmLed_thermalcheckmode(b);
+    sleep(2);
+    pwmLed_thermalcheckmode(c);
+    sleep(2);
+    pwmLed_thermalcheckmode(d);
+    sleep(2);
+    
+    //---led끄기 및 종료---//
+    pwmLedOff();
 
-sleep(1);
-//pwmInactiveAll();
-return 0;
+    return 0;
 }
