@@ -2,7 +2,6 @@ all:main.elf
 	
 main.elf: libMyPeri.a main.o
 	arm-linux-gnueabi-gcc main.o -lpthread -l MyPeri -L. -o main.elf
-	scp *.elf ecube@192.168.0.8:/home/ecube/ecube_jo
 
 main.o : main.c
 	arm-linux-gnueabi-gcc -c main.c -o main.o
@@ -10,8 +9,8 @@ main.o : main.c
 libMyPeri.a: led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o buzzer.o
 	arm-linux-gnueabi-ar rc libMyPeri.a led.o button.o fnd.o textlcd.o colorled.o temperature.o acclMagGyro.o buzzer.o
 
-acclMagGyro.o : acclMagGyro.c acclMagGyro.h
-	arm-linux-gnueabi-gcc -c acclMagGyro.c -o acclMagGyro.o
+accelMagGyro.o : accelMagGyro.c accelMagGyro.h
+	arm-linux-gnueabi-gcc -c accelMagGyro.c -o accelMagGyro.o
 
 temperature.o : temperature.c temperature.h
 	arm-linux-gnueabi-gcc -c temperature.c -o temperature.o
