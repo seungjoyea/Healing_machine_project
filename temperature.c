@@ -9,6 +9,8 @@
 #include <sys/ioctl.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
+#include <pthread.h>
+#define MUTEX_ENABLE 0
 
 #define SPIFILE "/dev/spidev1.0"
 
