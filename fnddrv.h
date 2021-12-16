@@ -12,7 +12,7 @@ typedef struct FNDWriteDataForm_tag
 }stFndWriteForm,*pStFndWriteForm;
 
 void fnd_static_dis(long a);
-void fnd_time_dis(void);
+int fnd_time_dis(void);
 void fnd_count_dis(long a);
 void fnd_rev_count_dis(long a);
 int fndOff();

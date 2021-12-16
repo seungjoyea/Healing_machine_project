@@ -49,7 +49,7 @@ fndDisp(a , 0);
 }
 
 //-------------3. fnd time display------------//
-void fnd_time_dis(void)
+int fnd_time_dis(void)
 {
     int number;
     struct tm *ptmcur;

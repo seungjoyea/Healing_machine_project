@@ -175,9 +175,9 @@ void buzzerSiren(void)
     }
 }
 
-void buzzerPlaySong(void) //무엇이무엇이똑같을까
+void buzzerPlaySong(void) //징글벨
 {           
-    F_DO();
+    F_MI();
     buzzerON();
     usleep(500000);
     buzzerOFF();
@@ -189,17 +189,29 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
     buzzerOFF();
     usleep(50000);
 
-    F_SOL();
+    F_MI();
+    buzzerON();
+    usleep(800000);
+    buzzerOFF();
+    usleep(100000);
+
+    F_MI();
     buzzerON();
     usleep(500000);
     buzzerOFF();
     usleep(50000);
 
-    F_DO();
+    F_MI();
     buzzerON();
     usleep(500000);
     buzzerOFF();
     usleep(50000);
+
+    F_MI();
+    buzzerON();
+    usleep(800000);
+    buzzerOFF();
+    usleep(100000);
 
     F_MI();
     buzzerON();
@@ -213,29 +225,35 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
     buzzerOFF();
     usleep(50000);
 
-    F_RA();
+    F_DO();
     buzzerON();
     usleep(500000);
     buzzerOFF();
     usleep(50000);
 
-    F_RA();
+    F_RE();
     buzzerON();
     usleep(500000);
     buzzerOFF();
     usleep(50000);
 
-    F_RA();
-    buzzerON();
-    usleep(500000);
-    buzzerOFF();
-    usleep(50000);
-
-    F_SOL();
+    F_MI();
     buzzerON();
     usleep(1100000);
     buzzerOFF();
     usleep(100000);
+    
+    F_PA();
+    buzzerON();
+    usleep(500000);
+    buzzerOFF();
+    usleep(50000);
+
+    F_PA();
+    buzzerON();
+    usleep(500000);
+    buzzerOFF();
+    usleep(50000);
 
     F_PA();
     buzzerON();
@@ -248,7 +266,7 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
     usleep(500000);
     buzzerOFF();
     usleep(50000);
-
+    
     F_PA();
     buzzerON();
     usleep(500000);
@@ -260,13 +278,19 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
     usleep(500000);
     buzzerOFF();
     usleep(50000);
-    
+
     F_MI();
     buzzerON();
     usleep(500000);
     buzzerOFF();
     usleep(50000);
-    
+
+    F_MI();
+    buzzerON();
+    usleep(500000);
+    buzzerOFF();
+    usleep(50000);
+
     F_MI();
     buzzerON();
     usleep(500000);
@@ -285,15 +309,21 @@ void buzzerPlaySong(void) //무엇이무엇이똑같을까
     buzzerOFF();
     usleep(50000);
 
-    F_RE();
-    buzzerON();
-    usleep(500000);
-    buzzerOFF();
-    usleep(50000);
-    
     F_DO();
     buzzerON();
-    usleep(1100000);
+    usleep(500000);
+    buzzerOFF();
+    usleep(50000);
+    
+     F_RE();
+    buzzerON();
+    usleep(500000);
+    buzzerOFF();
+    usleep(50000);
+
+    F_SOL();
+    buzzerON();
+    usleep(500000);
     buzzerOFF();
     usleep(100000);
 
