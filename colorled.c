@@ -16,6 +16,39 @@
 #define PWM_COLOR_B 2
 #define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz 
 
+int slowly_DARK(void)
+{
+int i;
+for(i =100; i>0 ; i--) {
+pwmSetPercent_RED(i);
+pwmSetPercent_BLUE(i);
+pwmSetPercent_GREEN(i);
+usleep(30000);
+}
+}
+
+int slowly_WHITE(void)
+{
+int i;
+for(i =0; i<100 ; i++) {
+pwmSetPercent_RED(i);
+pwmSetPercent_BLUE(i);
+pwmSetPercent_GREEN(i);
+usleep(30000);
+}
+}
+
+void ColorLED_OFF(void)
+{
+pwmSetPercent_RED(0);
+pwmSetPercent_BLUE(0);
+pwmSetPercent_GREEN(0);
+}
+
+
+
+
+
 int pwmActiveAll(void)
 {
 int fd = 0;
