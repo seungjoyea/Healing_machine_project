@@ -6,11 +6,9 @@
 #define MAGNEPATH "/sys/class/misc/FreescaleMagnetometer/"
 #define GYROPATH "/sys/class/misc/FreescaleGyroscope/"
 
-#include "accelMagGyro.h"
-
-void p_Accel(void)
+int read_acclAccelerometer(void)
 {
-int fd = 0;
+	int fd = 0;
 FILE *fp = NULL;
 //Accelerometer
 fd = open (ACCELPATH "enable",O_WRONLY);
@@ -21,11 +19,12 @@ int accel[3];
 fscanf(fp,"%d, %d, %d",&accel[0],&accel[1],&accel[2]);
 printf ("I read Accel %d, %d, %d\r\n",accel[0],accel[1],accel[2]);
 fclose(fp);
-}
 
-void p_Magnet(void)
+return accel[0];
+}
+void read_Magnetometer(void)
 {
-int fd = 0;
+	int fd = 0;
 FILE *fp = NULL;
 //Magnetometer
 fd = open (MAGNEPATH "enable",O_WRONLY);
@@ -37,10 +36,9 @@ fscanf(fp,"%d, %d, %d",&magne[0],&magne[1],&magne[2]);
 printf ("I read Magneto %d, %d, %d\r\n",magne[0],magne[1],magne[2]);
 fclose(fp);
 }
-
-void p_Gyro(void)
+void read_Gyroscope(void)
 {
-int fd = 0;
+	int fd = 0;
 FILE *fp = NULL;
 //Gyroscope
 fd = open (GYROPATH "enable",O_WRONLY);
@@ -51,4 +49,7 @@ int gyro[3];
 fscanf(fp,"%d, %d, %d",&gyro[0],&gyro[1],&gyro[2]);
 printf ("I read Gyroscope %d, %d, %d\r\n",gyro[0],gyro[1],gyro[2]);
 fclose(fp);
+
+
+
 }

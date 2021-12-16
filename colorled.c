@@ -213,19 +213,19 @@ int pwmLedOff(void)
 int pwmLed_thermalcheckmode(double a)
 {
     pwmLedInit();
-    if(a>80)
+    if(a>29)
     {
     pwmSetPercent(0,0);
     pwmSetPercent(0,1);
     pwmSetPercent(100,2);
     }
-    else if(a>60)
+    else if(a>28)
     {
     pwmSetPercent(100,0);
     pwmSetPercent(100,1);
     pwmSetPercent(100,2);
     }
-    else if(a>40)
+    else if(a>27)
     {
     pwmSetPercent(0,0);
     pwmSetPercent(100,1);

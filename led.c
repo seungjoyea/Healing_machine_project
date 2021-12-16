@@ -1,14 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/ioctl.h>
-#include <ctype.h>
-#include <sys/ipc.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+//#include “led.h”
 #include <fcntl.h>
-#include <unistd.h>
-#include "led.h"
 
 static unsigned int ledValue = 0;
 static int fd = 0;
@@ -51,6 +42,70 @@ write (fd, &ledValue, 4);
 sleep(1);
 }
 }
+
+int led_12(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b00000011;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_23(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b00000110;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_34(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b00001100;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_45(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b00011000;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_56(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b00110000;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_67(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b01100000;
+write (fd, &ledValue, 4);
+}
+}
+
+int led_78(void)
+{
+for(num_4sec=0;num_4sec<2;num_4sec++){
+ledValue = 0b11000000;
+write (fd, &ledValue, 4);
+}
+}
+
+
+
+
+
+
+
+
 
 int AllLEDon_1s_twoLED_OFF_1s(void)
 {
