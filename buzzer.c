@@ -135,7 +135,50 @@ int fd=open(path,O_WRONLY);
 dprintf(fd, "%d", 523);
 close(fd);
 }
+void F_RE_High(void)
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 587);
+close(fd);
+}
 
+void F_MI_High(void)
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 659);
+close(fd);
+}
+
+void F_PA_High(void)
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 698);
+close(fd);
+}
+
+void F_SOL_High(void) 
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 784);
+close(fd);
+}
+
+void F_RA_High(void)
+{
+char path[200];
+sprintf(path,"%s%s",gBuzzerBaseSysDir,BUZZER_FREQUENCY_NAME);
+int fd=open(path,O_WRONLY);
+dprintf(fd, "%d", 880);
+close(fd);
+}
 
 ///////////////////사용자 제작 함수/////////////////////////
 void buzzerTest(void)
@@ -158,6 +201,129 @@ void buzzerTest(void)
     F_DO_High();
     usleep(800000);
     buzzerOFF();
+}
+
+void buzzer_Last_Christmas_Song(void) //징글벨
+{
+	//레
+	F_RE_High();
+    buzzerON();
+    usleep(1000000);  //0.5초에 500000 //꼬리하나에 500000
+    buzzerOFF();
+    usleep(50000);   
+    
+    //레
+	F_RE_High();
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000);   
+    
+    //도
+	F_DO_High(); 
+    buzzerON();
+    usleep(1000000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000);   
+    //솔
+    F_SOL(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000);   
+    //레
+    F_RE_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //레
+    F_RE_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //미
+    F_MI_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //도
+    F_DO_High(); 
+    buzzerON();
+    usleep(1500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //라
+    F_RA(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //라
+    F_RA(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //레
+    F_RE_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //레
+    F_RE_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //미
+    F_MI_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //도
+	F_DO_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(100000);  
+    //라
+    F_RA(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //시
+    F_SI(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //도
+	F_DO_High(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000);  
+    //시
+    F_SI(); 
+    buzzerON();
+    usleep(500000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    //라
+    F_RA(); 
+    buzzerON();
+    usleep(100000);  //0.5초에 500000
+    buzzerOFF();
+    usleep(50000); 
+    
+    
+    
 }
 
 void buzzerSiren(void)
