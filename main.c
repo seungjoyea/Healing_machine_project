@@ -73,11 +73,11 @@ char bulk_message[1000];
 
 static int cmp1, cmp2, cmp3,cmp4 ,cmp5, cmp6, cmp7, cmp8;  //두 문자열이 같으면 cmp = 0
 
-/*/*/*/*/*/*/*/*/*/*/ 바꿔야함
+
 pthread_t tid_led, tid_fnd, tid_textlcd, tid_colorled, tid_temperature, tid_acclMagGyro; //pthread 주소 return
 static int err; //thread 생성 에러 검출
 static int i; //에러확인용 변수
-*/*/*/*/*/*/*/*/*/*/*/
+
 
 
 //1번 버
@@ -86,13 +86,8 @@ void* SLEEP_MODE(void *arg)
 	//3초에 걸쳐 천천히 꺼짐
     slowly_DARK();
     
-    ColorLED_Red(); 
     sleep(1);
-    ColorLED_Green();
-    sleep(1);
-    ColorLED_Blue();
-    sleep(1);
-    buzzer_Last_Christmas_Song();
+    buzzerPlaySong();
     ColorLED_OFF();
 }
 
@@ -124,7 +119,15 @@ void* fix_posture(void *arg)
 }
 
 //3번 버튼 시작
-void* temperature(void *arg){
+void* thermal_mode(void *arg)
+{
+	pthread_t tid[4];
+	double temper = 0;
+    int ready = 0;
+
+    pthread_mutex_t lock;
+    
+    void* temperature(void *arg){
     while(1){
         //pthread_mutex_lock(&lock);
         temper=read_temperature();
@@ -170,12 +173,44 @@ void* thermode_txtlcd(void *arg){
     sleep(1000);
     
 }
-//3번 버튼 끝
+
+    
+	int err0;
+    int err1; 
+    int err2;
+    int err3;
+	
+	pwmLedInit();
+
+    if(pthread_mutex_init(&lock, NULL) != 0) {
+        printf("\n Mutext Init Failed!!\n");
+        return 1;
+    }
+
+    err0 = pthread_create(&(tid[0]), NULL, &temperature, NULL);
+    if(err0 !=0) printf("Thread Create Error: [%d]\n",err0);
+
+    err1 = pthread_create(&(tid[1]), NULL, &thermalcheckmode, NULL);
+    if(err1 !=0) printf("Thread Create Error: [%d]\n",err1);
+
+    err2 = pthread_create(&(tid[2]), NULL, &fndtherview, NULL);
+    if(err2 !=0) printf("Thread Create Error: [%d]\n",err2);
+
+    err3 = pthread_create(&(tid[3]), NULL, &thermode_txtlcd, NULL);
+    if(err3 !=0)
+    printf("Thread Create Error: [%d]\n",err3);
+
+
+    pthread_join (tid[0], NULL);
+    pthread_join (tid[1], NULL);
+    pthread_join (tid[2], NULL);
+    pthread_join (tid[3], NULL);
+}
+
 
 int main(int argc , char **argv)
 {
-	
-	
+
 	//버튼 관련
 	structMyMsg messageRxData;
     int msgID = msgget((key_t)9999, IPC_CREAT|0666);
@@ -213,13 +248,13 @@ int main(int argc , char **argv)
 	}
     else if (cmp3==0){
         printf("button3 "); 
-        err = pthread_create(&tid_textlcd, NULL, &textlcd_Func, NULL);  //thread_button 생성
+        err = pthread_create(&tid_textlcd, NULL, &thermal_mode, NULL);  //thread_button 생성
         if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인  
     }
     else if (cmp4==0) {
         printf("button4 ");
-        err = pthread_create(&tid_colorled, NULL, &Buzzer_Func, NULL);  //thread_button 생성
-        if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
+ /*       err = pthread_create(&tid_colorled, NULL, &Buzzer_Func, NULL);  //thread_button 생성
+        if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인*/
 	}
     else if (cmp5==0)
         printf("button5 ");
