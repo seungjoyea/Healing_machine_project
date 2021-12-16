@@ -17,6 +17,9 @@ int ColorLED_Green(void);
 int ColorLED_Red(void);
 int ColorLED_White(void);
 
+int slowly_DARK(void);
+void ColorLED_OFF(void);
+int slowly_WHITE(void);
 
 int pwmLedOff(void);
 int pwmLed_thermalcheckmode(double a);
