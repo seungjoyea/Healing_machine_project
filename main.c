@@ -15,11 +15,11 @@
 #include <errno.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
+#include <sys/msg.h>
 /////////////////////////////////////////////////////////////
 #include <pthread.h>
 #define MUTEX_ENABLE 0
 ////////////////////////////////////////////////////////////
-
 //사용자 헤더 파일 전처리
 #include "buzzer.h"
 #include "textlcddrv.h"
@@ -60,15 +60,70 @@
 #define PWM_PERIOD_NS 1000000 //ns. = 1ms = 1khz 
 
 
-///////////////////////쓰레드를 위한 전역 변수 파트 //////////////////
-pthread_t tid[4];
-double temper = 0;
-int ready = 0;
+////////////////////////////////////////
+//////////   메세지 관련    ////////////
+///////////////////////////////////////
 
-pthread_mutex_t lock;
-///////////////////////////////////////////////////////////////////
+//message structure
+typedef struct
+{
+long int messageType;
+char bulk_message[1000];
+} structMyMsg;
+
+static int cmp1, cmp2, cmp3,cmp4 ,cmp5, cmp6, cmp7, cmp8;  //두 문자열이 같으면 cmp = 0
+
+/*/*/*/*/*/*/*/*/*/*/ 바꿔야함
+pthread_t tid_led, tid_fnd, tid_textlcd, tid_colorled, tid_temperature, tid_acclMagGyro; //pthread 주소 return
+static int err; //thread 생성 에러 검출
+static int i; //에러확인용 변수
+*/*/*/*/*/*/*/*/*/*/*/
 
 
+//1번 버
+void* SLEEP_MODE(void *arg)
+{
+	//3초에 걸쳐 천천히 꺼짐
+    slowly_DARK();
+    
+    ColorLED_Red(); 
+    sleep(1);
+    ColorLED_Green();
+    sleep(1);
+    ColorLED_Blue();
+    sleep(1);
+    buzzer_Last_Christmas_Song();
+    ColorLED_OFF();
+}
+
+
+//2번 버튼
+void* fix_posture(void *arg)
+{
+    int inclination;
+    ledLibInit();
+    ledAllBlink_4sec();
+    while(1) {
+        inclination = read_acclAccelerometer();
+        usleep(500000);
+        if(inclination > 4500)
+            led_12();
+        else if(3000<inclination && inclination<4500)
+            led_23();
+        else if(1500<inclination && inclination<3000)
+            led_34();
+        else if(-1500<inclination && inclination<1500)
+            led_45();
+        else if(-3000<inclination && inclination<-1500)
+            led_56();
+        else if(-4500<inclination && inclination<-3000)
+            led_67();          
+        else if(-6000<inclination && inclination<-4500)
+            led_78();                     
+    }
+}
+
+//3번 버튼 시작
 void* temperature(void *arg){
     while(1){
         //pthread_mutex_lock(&lock);
@@ -77,7 +132,6 @@ void* temperature(void *arg){
         sleep(1);
     }
 }
-
 void* thermalcheckmode(void *arg){
     while(1){
     //pwmLed_thermalcheckmode(temper);
@@ -116,44 +170,86 @@ void* thermode_txtlcd(void *arg){
     sleep(1000);
     
 }
+//3번 버튼 끝
 
-
-int main(){
-
-int err0;
-int err1;
-int err2;
-int err3;
-
-
-pwmLedInit();
-
-if(pthread_mutex_init(&lock, NULL) != 0)
+int main(int argc , char **argv)
 {
-    printf("\n Mutext Init Failed!!\n");
-    return 1;
-}
+	
+	
+	//버튼 관련
+	structMyMsg messageRxData;
+    int msgID = msgget((key_t)9999, IPC_CREAT|0666);
+    if(msgID == -1){                               //우체통 생성 확인
+        printf("Cannot get msgQueueID\n"); 
+        return -1;
+    }
 
-err0 = pthread_create(&(tid[0]), NULL, &temperature, NULL);
-if(err0 !=0) printf("Thread Create Error: [%d]\n",err0);
+    while (1) 
+    {
+    int returnValue = 0;
+    returnValue = msgrcv(msgID, &messageRxData, sizeof(messageRxData.bulk_message
+    ), 0, 0); //Wait here if no message
 
-err1 = pthread_create(&(tid[1]), NULL, &thermalcheckmode, NULL);
-if(err1 !=0) printf("Thread Create Error: [%d]\n",err1);
+    cmp1 = strcmp(messageRxData.bulk_message, "1");
+    cmp2 = strcmp(messageRxData.bulk_message, "2");
+    cmp3 = strcmp(messageRxData.bulk_message, "3");
+    cmp4 = strcmp(messageRxData.bulk_message, "4");
+    cmp5 = strcmp(messageRxData.bulk_message, "5");
+    cmp6 = strcmp(messageRxData.bulk_message, "6");
+    cmp7 = strcmp(messageRxData.bulk_message, "7");
+    cmp8 = strcmp(messageRxData.bulk_message, "8");
 
-err2 = pthread_create(&(tid[2]), NULL, &fndtherview, NULL);
-if(err2 !=0) printf("Thread Create Error: [%d]\n",err2);
+//버튼 1 누르면 SLEEP MODE
+    if(cmp1==0) {
+        printf("button1 ");
+        err = pthread_create(&tid_led, NULL, &SLEEP_MODE, NULL);  //thread_led 생성
+        if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인 
+	}
+//버튼 2 누르면 자세교정 MODE
+    else if (cmp2==0){
+        printf("button2 ");
+	    err = pthread_create(&tid_fnd, NULL, &fix_posture, NULL);  //thread_button 생성
+       if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인	
+	}
+    else if (cmp3==0){
+        printf("button3 "); 
+        err = pthread_create(&tid_textlcd, NULL, &textlcd_Func, NULL);  //thread_button 생성
+        if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인  
+    }
+    else if (cmp4==0) {
+        printf("button4 ");
+        err = pthread_create(&tid_colorled, NULL, &Buzzer_Func, NULL);  //thread_button 생성
+        if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
+	}
+    else if (cmp5==0)
+        printf("button5 ");
+    else if (cmp6==0) {
+        printf("button6 ");
+        buzzerOFF();
+	}
+    else if (cmp7==0)
+        printf("pressed\n");
+    else if (cmp8==0)
+        printf("released\n");
+	}
+   
+/*
+    err = pthread_create(&tid_colorled, NULL, &colorled_Func, NULL);  //thread_button 생성
+    if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
 
-err3 = pthread_create(&(tid[3]), NULL, &thermode_txtlcd, NULL);
-if(err3 !=0)
-printf("Thread Create Error: [%d]\n",err3);
-
-
-pthread_join (tid[0], NULL);
-pthread_join (tid[1], NULL);
-pthread_join (tid[2], NULL);
-pthread_join (tid[3], NULL);
-
-
+    err = pthread_create(&tid_temperature, NULL, &temperature_Func, NULL);  //thread_button 생성
+    if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
     
-    return 0;
+    err = pthread_create(&tid_acclMagGyro, NULL, &acclMagGyro_Func, NULL);  //thread_button 생성
+    if(err != 0) printf("Thread Create Error: [%d]\n", i);  //Thread 생성 확인
+
+
+    pthread_join(tid_led,NULL); //Thread 종료시까지 wait
+    pthread_join(tid_fnd,NULL); //Thread 종료시까지 wait
+    pthread_join(tid_textlcd,NULL); //Thread 종료시까지 wait
+    pthread_join(tid_colorled,NULL); //Thread 종료시까지 wait    
+    pthread_join(tid_temperature,NULL); //Thread 종료시까지 wait    
+    pthread_join(tid_acclMagGyro,NULL); //Thread 종료시까지 wait    
+	return 0;
+	*/
 }
