@@ -272,5 +272,3 @@ int pwmLed_thermalcheckmode(double a)
     }
     return 0;
 }
-
-
